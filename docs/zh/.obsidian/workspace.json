@@ -1,0 +1,155 @@
+{
+  "main": {
+    "id": "183fcd76ad2263bb",
+    "type": "split",
+    "children": [
+      {
+        "id": "3b4a64c9bb398a9c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6c68a66ea76c7db1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "s05-skill-loading.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c095a65743b5a31d",
+    "type": "split",
+    "children": [
+      {
+        "id": "ccc972f43bc9789a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f2d5abdfbdc728d1",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "385ffdd6c89c9ca3",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "d6a65cca39a8a042",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "dcc80b543f4d7222",
+    "type": "split",
+    "children": [
+      {
+        "id": "3c470bdd63aa2512",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "420844470c66f8f6",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "s05-skill-loading.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "b40b2c8a7b20acac",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "s05-skill-loading.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "fb164f5933904974",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "0c2096a0387f75e3",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "s05-skill-loading.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "6c68a66ea76c7db1",
+  "lastOpenFiles": [
+    "s04-subagent.md",
+    "s03-todo-write.md",
+    "s02-tool-use.md"
+  ]
+}

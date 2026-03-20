@@ -37,7 +37,11 @@ One lookup replaces any if/elif chain.
 def safe_path(p: str) -> Path:
     path = (WORKDIR / p).resolve()
     if not path.is_relative_to(WORKDIR):
-        raise ValueError(f"Path escapes workspace: {p}")
+        raise ValueError(f"Path escapes workspace: {p}")def safe_path(p: str) -> Path:
+            path = (WORKDIR / p).resolve()
+            if not path.is_relative_to(WORKDIR):
+                raise ValueError(f"Path escapes workspace: {p}")
+            return path
     return path
 
 def run_read(path: str, limit: int = None) -> str:
@@ -79,12 +83,12 @@ for block in response.content:
 
 ## 相对 s01 的变更
 
-| 组件           | 之前 (s01)         | 之后 (s02)                     |
-|----------------|--------------------|--------------------------------|
-| Tools          | 1 (仅 bash)        | 4 (bash, read, write, edit)    |
-| Dispatch       | 硬编码 bash 调用   | `TOOL_HANDLERS` 字典           |
-| 路径安全       | 无                 | `safe_path()` 沙箱             |
-| Agent loop     | 不变               | 不变                           |
+| 组件         | 之前 (s01)    | 之后 (s02)                    |
+| ---------- | ----------- | --------------------------- |
+| Tools      | 1 (仅 bash)  | 4 (bash, read, write, edit) |
+| Dispatch   | 硬编码 bash 调用 | `TOOL_HANDLERS` 字典          |
+| 路径安全       | 无           | `safe_path()` 沙箱            |
+| Agent loop | 不变          | 不变                          |
 
 ## 试一试
 
