@@ -41,20 +41,20 @@ if os.getenv("ANTHROPIC_BASE_URL"):
     os.environ.pop("ANTHROPIC_AUTH_TOKEN", None)
 
 WORKDIR = Path.cwd()
-client = Anthropic(base_url=os.getenv("ANTHROPIC_BASE_URL"))
+client = Anthropic(base_url=os.getenv("ANTHROPIC_BASE_URL"))#一个专门用于处理与大模型收发消息的库
 MODEL = os.environ["MODEL_ID"]
 
 SYSTEM = f"You are a coding agent at {WORKDIR}. Use tools to solve tasks. Act, don't explain."
 
 
-def safe_path(p: str) -> Path:
+def safe_path(p: str) -> Path:#保证工作路径
     path = (WORKDIR / p).resolve()
     if not path.is_relative_to(WORKDIR):
         raise ValueError(f"Path escapes workspace: {p}")
     return path
 
 
-def run_bash(command: str) -> str:
+def run_bash(command: str) -> str:#执行指令，防止危险指令被实现
     dangerous = ["rm -rf /", "sudo", "shutdown", "reboot", "> /dev/"]
     if any(d in command for d in dangerous):
         return "Error: Dangerous command blocked"
@@ -67,7 +67,7 @@ def run_bash(command: str) -> str:
         return "Error: Timeout (120s)"
 
 
-def run_read(path: str, limit: int = None) -> str:
+def run_read(path: str, limit: int = None) -> str:#读
     try:
         text = safe_path(path).read_text()
         lines = text.splitlines()
@@ -78,7 +78,7 @@ def run_read(path: str, limit: int = None) -> str:
         return f"Error: {e}"
 
 
-def run_write(path: str, content: str) -> str:
+def run_write(path: str, content: str) -> str:#写
     try:
         fp = safe_path(path)
         fp.parent.mkdir(parents=True, exist_ok=True)
@@ -88,7 +88,7 @@ def run_write(path: str, content: str) -> str:
         return f"Error: {e}"
 
 
-def run_edit(path: str, old_text: str, new_text: str) -> str:
+def run_edit(path: str, old_text: str, new_text: str) -> str:#新旧文本段替换
     try:
         fp = safe_path(path)
         content = fp.read_text()
@@ -101,7 +101,7 @@ def run_edit(path: str, old_text: str, new_text: str) -> str:
 
 
 # -- The dispatch map: {tool_name: handler} --
-TOOL_HANDLERS = {
+TOOL_HANDLERS = {#以下都是匿名函数，收到的内容都放到字典kw中，kw["command"]的意思是获得字典中command属性的值
     "bash":       lambda **kw: run_bash(kw["command"]),
     "read_file":  lambda **kw: run_read(kw["path"], kw.get("limit")),
     "write_file": lambda **kw: run_write(kw["path"], kw["content"]),
@@ -122,37 +122,38 @@ TOOLS = [
 
 def agent_loop(messages: list):
     while True:
-        response = client.messages.create(
+        response = client.messages.create(#获取模型回复
             model=MODEL, system=SYSTEM, messages=messages,
             tools=TOOLS, max_tokens=8000,
         )
-        messages.append({"role": "assistant", "content": response.content})
+        messages.append({"role": "assistant", "content": response.content})#将本次模型回复加入到上下文记录中
         if response.stop_reason != "tool_use":
             return
         results = []
-        for block in response.content:
+        for block in response.content:#分块读取response，block只是一个变量名
             if block.type == "tool_use":
-                handler = TOOL_HANDLERS.get(block.name)
-                output = handler(**block.input) if handler else f"Unknown tool: {block.name}"
+                handler = TOOL_HANDLERS.get(block.name)#获取要执行哪个方法
+                output = handler(**block.input) if handler else f"Unknown tool: {block.name}"#handler此时是一个方法，**的意思是将字典完全拆开传进去，合起来就是将block.input拆开传入到目标函数中
                 print(f"> {block.name}: {output[:200]}")
-                results.append({"type": "tool_result", "tool_use_id": block.id, "content": output})
-        messages.append({"role": "user", "content": results})
+                results.append({"type": "tool_result", "tool_use_id": block.id, "content": output})#不管是否执行成功，将工具的返回值写入到result中
+        messages.append({"role": "user", "content": results})#将result加入上下文的message
 
 
 if __name__ == "__main__":
     history = []
     while True:
         try:
-            query = input("\033[36ms02 >> \033[0m")
+            query = input("\033[36ms02 >> \033[0m")#等待输入颜色指定
         except (EOFError, KeyboardInterrupt):
             break
         if query.strip().lower() in ("q", "exit", ""):
             break
-        history.append({"role": "user", "content": query})
+        history.append({"role": "user", "content": query})#将用户输入内容加上history，传给agentloop，history就是loop里的message
         agent_loop(history)
-        response_content = history[-1]["content"]
-        if isinstance(response_content, list):
+        response_content = history[-1]["content"]#[-1]在python中是最后一个的意思
+        if isinstance(response_content, list):#如果response_content是一个列表
             for block in response_content:
-                if hasattr(block, "text"):
+                if hasattr(block, "text"):#判断该block有没有text，如果有就打印出来
                     print(block.text)
-        print()
+        print()#如果不是列表就打印空行
+        
