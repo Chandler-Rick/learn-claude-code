@@ -30,6 +30,14 @@ Tasks are the control plane and worktrees are the execution plane.
 Key insight: "Isolate by directory, coordinate by task ID."
 """
 
+# ==================== 中文导读（s12）====================
+# 本案例强调“任务-工作树隔离”：
+# - 任务系统负责控制面（task_id、状态、归属）；
+# - git worktree 负责执行面（独立目录/分支并行开发）。
+#
+# 通过隔离执行目录，可显著降低并行改动互相污染的风险。
+# =======================================================
+
 import json
 import os
 import re

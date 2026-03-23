@@ -25,6 +25,15 @@ before each LLM call to deliver results.
 Key insight: "Fire and forget -- the agent doesn't block while the command runs."
 """
 
+# ==================== 中文导读（s08）====================
+# 本案例支持后台任务并行执行：
+# - 主循环可继续与模型交互；
+# - 长命令在线程中运行；
+# - 完成后写入通知队列，在下次模型调用前注入结果。
+#
+# 适合“启动耗时任务 + 同时处理别的工作”的场景。
+# =======================================================
+
 import os
 import subprocess
 import threading

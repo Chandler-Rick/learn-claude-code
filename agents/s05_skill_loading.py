@@ -35,6 +35,14 @@ Two-layer skill injection that avoids bloating the system prompt:
 Key insight: "Don't put everything in the system prompt. Load on demand."
 """
 
+# ==================== 中文导读（s05）====================
+# 本案例实现“按需加载技能（Skill）”：
+# - 系统提示词中只放技能元信息（名称、描述）以节省 token；
+# - 模型真正需要某个技能时，再调用 load_skill 读取完整 SKILL.md。
+#
+# 这样既保留可扩展性，也避免把大量说明一次性塞进 system prompt。
+# =======================================================
+
 import os
 import re
 import subprocess

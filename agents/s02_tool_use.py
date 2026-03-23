@@ -19,6 +19,15 @@ and a dispatch map to route calls.
 Key insight: "The loop didn't change at all. I just added tools."
 """
 
+# ==================== 中文导读（s02）====================
+# 本案例重点是“工具分发（tool dispatch）”：
+# - 把多个工具声明给模型（bash/read/write/edit）；
+# - 在 Python 侧根据工具名路由到对应函数；
+# - 统一把执行结果封装成 tool_result 回传。
+#
+# 关键理解：Agent Loop 本身不需要改，只是“可调用能力”变多了。
+# =======================================================
+
 import os
 import subprocess
 from pathlib import Path

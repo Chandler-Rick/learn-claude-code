@@ -23,6 +23,15 @@ context, sharing the filesystem, then returns only a summary to the parent.
 Key insight: "Process isolation gives context isolation for free."
 """
 
+# ==================== 中文导读（s04）====================
+# 本案例展示“子代理（subagent）”模式：
+# - 父代理遇到子任务时，调用 task 工具启动子代理；
+# - 子代理使用全新 messages=[] 上下文独立工作；
+# - 最后只把摘要返回给父代理，避免主上下文膨胀。
+#
+# 这是控制上下文污染、提升复杂任务稳定性的常见工程技巧。
+# =======================================================
+
 import os
 import subprocess
 from pathlib import Path

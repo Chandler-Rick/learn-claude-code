@@ -36,6 +36,20 @@ NOT a teaching session -- this is the "put it all together" reference.
     REPL commands: /compact /tasks /team /inbox
 """
 
+# ==================== 中文导读（s_full）====================
+# 这是聚合版参考实现：把 s01~s11 的核心机制整合到一个可运行 Agent。
+#
+# 主要组合能力：
+# - 基础工具分发（s02）
+# - Todo 与任务系统（s03/s07）
+# - 子代理与团队通信（s04/s09）
+# - 协议审批与自主空闲轮询（s10/s11）
+# - 后台任务与上下文压缩（s08/s06）
+# - 技能按需加载（s05）
+#
+# 可把它当作“工程化模板”，用于改造成你自己的生产 Agent。
+# ==========================================================
+
 import json
 import os
 import re
