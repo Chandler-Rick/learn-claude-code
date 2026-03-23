@@ -34,6 +34,15 @@ Three-layer compression pipeline so the agent can work forever:
 Key insight: "The agent can forget strategically and keep working forever."
 """
 
+# ==================== 中文导读（s06）====================
+# 本案例是“上下文压缩”三层方案：
+# 1) micro_compact：把较旧 tool_result 替换成短占位；
+# 2) auto_compact：超阈值时自动总结并重置消息；
+# 3) compact 工具：允许模型主动触发压缩。
+#
+# 核心目标：在长会话中控制 token 增长，维持可持续运行。
+# =======================================================
+
 import json
 import os
 import subprocess

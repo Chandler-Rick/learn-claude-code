@@ -24,6 +24,20 @@ until the model decides to stop. Production agents layer
 policy, hooks, and lifecycle controls on top.
 """
 
+# ==================== 中文导读（s01）====================
+# 这个案例演示“最小可用 Agent”循环：
+# 1) 模型先基于历史消息决定下一步；
+# 2) 若模型请求工具（tool_use），宿主程序执行工具；
+# 3) 再把 tool_result 回填给模型，继续下一轮。
+#
+# 你可以把它理解为：
+# - LLM 负责“决策”；
+# - Python 负责“执行”；
+# - messages 负责“记忆”。
+#
+# 后续 s02~s12 基本都在这个骨架上扩展能力，所以理解 s01 很关键。
+# =======================================================
+
 import os
 import subprocess
 

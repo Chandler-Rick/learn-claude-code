@@ -47,6 +47,14 @@ request_id correlation pattern. Builds on s09's team messaging.
 Key insight: "Same request_id correlation pattern, two domains."
 """
 
+# ==================== 中文导读（s10）====================
+# 本案例在团队协作上加入“协议层”：
+# - 关机协议：shutdown_request -> shutdown_response；
+# - 计划审批：plan_approval -> plan_approval_response。
+#
+# 两者都依赖 request_id 做请求-响应关联，保证异步消息可追踪。
+# =======================================================
+
 import json
 import os
 import subprocess

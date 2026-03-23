@@ -27,6 +27,17 @@ forces it to keep updating when it forgets.
 Key insight: "The agent can track its own progress -- and I can see it."
 """
 
+# ==================== 中文导读（s03）====================
+# 本案例加入 TodoWrite 思想：让模型把计划“外显”为结构化待办列表。
+#
+# TodoManager 做三件事：
+# 1) 校验：限制任务数量、状态取值、并发 in_progress 数量；
+# 2) 存储：保存当前 todo 列表；
+# 3) 渲染：把结构化列表转成可读文本，便于模型和人查看。
+#
+# 同时通过“提醒注入（nag reminder）”机制，防止模型忘记更新待办。
+# =======================================================
+
 import os
 import subprocess
 from pathlib import Path

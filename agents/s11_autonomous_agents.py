@@ -35,6 +35,15 @@ identity re-injection after context compression. Builds on s10's protocols.
 Key insight: "The agent finds work itself."
 """
 
+# ==================== 中文导读（s11）====================
+# 本案例让队友代理具备“自主性”：
+# - 空闲时轮询 inbox 与任务板；
+# - 发现可领取任务会自动 claim 并继续工作；
+# - 长会话压缩后会重新注入身份信息，避免“失忆”。
+#
+# 这使代理从“被动等待指令”变成“主动寻找工作”。
+# =======================================================
+
 import json
 import os
 import subprocess

@@ -22,6 +22,16 @@ Each task has a dependency graph (blockedBy/blocks).
 Key insight: "State that survives compression -- because it's outside the conversation."
 """
 
+# ==================== 中文导读（s07）====================
+# 本案例把任务状态持久化到 .tasks/*.json，做到“会话外记忆”。
+#
+# TaskManager 维护任务依赖：
+# - blockedBy：当前任务被哪些任务阻塞；
+# - blocks：当前任务会阻塞哪些后续任务。
+#
+# 当任务完成时，需要同步解除被它阻塞的任务依赖。
+# =======================================================
+
 import json
 import os
 import subprocess

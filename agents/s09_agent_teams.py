@@ -43,6 +43,15 @@ its own agent loop in a separate thread. Communication via append-only inboxes.
 Key insight: "Teammates that can talk to each other."
 """
 
+# ==================== 中文导读（s09）====================
+# 本案例引入“多代理团队”：
+# - 每个成员有独立 inbox（JSONL 文件）；
+# - 每个成员在独立线程运行自己的 agent loop；
+# - 成员之间通过 send_message / broadcast 协作。
+#
+# 这相当于把单代理升级为“可通信的多工位系统”。
+# =======================================================
+
 import json
 import os
 import subprocess
