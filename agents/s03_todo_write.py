@@ -65,11 +65,11 @@ class TodoManager:
         self.items = []
 
     def update(self, items: list) -> str:
-        if len(items) > 20:
+        if len(items) > 20:#最多20个任务
             raise ValueError("Max 20 todos allowed")
         validated = []
         in_progress_count = 0
-        for i, item in enumerate(items):
+        for i, item in enumerate(items):#每一个事项需要id、实现状态、具体实现text
             text = str(item.get("text", "")).strip()
             status = str(item.get("status", "pending")).lower()
             item_id = str(item.get("id", str(i + 1)))
@@ -200,7 +200,6 @@ def agent_loop(messages: list):
         if rounds_since_todo >= 3:
             results.insert(0, {"type": "text", "text": "<reminder>Update your todos.</reminder>"})
         messages.append({"role": "user", "content": results})
-
 
 if __name__ == "__main__":
     history = []
