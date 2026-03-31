@@ -54,6 +54,8 @@ WORKDIR = Path.cwd()
 client = Anthropic(base_url=os.getenv("ANTHROPIC_BASE_URL"))
 MODEL = os.environ["MODEL_ID"]
 
+# LLM 会先看到这段系统提示；如果判断任务是多步任务，
+# 它可能主动先调用 todo 工具。代码本身不会预先帮它生成 todo 列表。
 SYSTEM = f"""You are a coding agent at {WORKDIR}.
 Use the todo tool to plan multi-step tasks. Mark in_progress before starting, completed when done.
 Prefer tools over prose."""
@@ -82,6 +84,8 @@ class TodoManager:
             validated.append({"id": item_id, "text": text, "status": status})
         if in_progress_count > 1:
             raise ValueError("Only one task can be in_progress at a time")
+        # 当 LLM 调用 todo 工具后，校验通过的计划会保存在这里，
+        # 变成对话外的结构化状态，而不只是停留在对话文本中。
         self.items = validated
         return self.render()
 
@@ -154,6 +158,8 @@ TOOL_HANDLERS = {
     "read_file":  lambda **kw: run_read(kw["path"], kw.get("limit")),
     "write_file": lambda **kw: run_write(kw["path"], kw["content"]),
     "edit_file":  lambda **kw: run_edit(kw["path"], kw["old_text"], kw["new_text"]),
+    # todo 列表只有在 LLM 明确选择调用这个工具时才会出现；
+    # 调用后会由 TodoManager.update() 负责保存。
     "todo":       lambda **kw: TODO.update(kw["items"]),
 }
 
@@ -166,6 +172,7 @@ TOOLS = [
      "input_schema": {"type": "object", "properties": {"path": {"type": "string"}, "content": {"type": "string"}}, "required": ["path", "content"]}},
     {"name": "edit_file", "description": "Replace exact text in file.",
      "input_schema": {"type": "object", "properties": {"path": {"type": "string"}, "old_text": {"type": "string"}, "new_text": {"type": "string"}}, "required": ["path", "old_text", "new_text"]}},
+    #todo工具任务，告诉LLM有todo这个方法，如果是多步骤任务就用这个拆分
     {"name": "todo", "description": "Update task list. Track progress on multi-step tasks.",
      "input_schema": {"type": "object", "properties": {"items": {"type": "array", "items": {"type": "object", "properties": {"id": {"type": "string"}, "text": {"type": "string"}, "status": {"type": "string", "enum": ["pending", "in_progress", "completed"]}}, "required": ["id", "text", "status"]}}}, "required": ["items"]}},
 ]
@@ -176,6 +183,8 @@ def agent_loop(messages: list):
     rounds_since_todo = 0
     while True:
         # Nag reminder is injected below, alongside tool results
+        # 每一轮都是 LLM 自己决定：直接回答，还是调用工具；
+        # 其中也包括决定是否用 todo 来创建或更新计划。
         response = client.messages.create(
             model=MODEL, system=SYSTEM, messages=messages,
             tools=TOOLS, max_tokens=8000,
@@ -194,10 +203,13 @@ def agent_loop(messages: list):
                     output = f"Error: {e}"
                 print(f"> {block.name}: {str(output)[:200]}")
                 results.append({"type": "tool_result", "tool_use_id": block.id, "content": str(output)})
+                # 这一轮只要用了 todo，就说明模型回到了计划板，偏离计数清零。
                 if block.name == "todo":
                     used_todo = True
         rounds_since_todo = 0 if used_todo else rounds_since_todo + 1
         if rounds_since_todo >= 3:
+            # s03 的纠偏很轻：harness 不会替模型重建 todo 列表，
+            # 只是在连续 3 轮没用 todo 时插入一条提醒，让它回去更新计划。
             results.insert(0, {"type": "text", "text": "<reminder>Update your todos.</reminder>"})
         messages.append({"role": "user", "content": results})
 
